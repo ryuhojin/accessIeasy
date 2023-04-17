@@ -1,10 +1,14 @@
 .Container {
-    height: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .Container {
+    font-size: 14px;
+    height: 48px;
   }
-  
-  @media (max-width: 768px) {
-    .Container {
-      height: 48px;
-    }
-  }
-  
+}

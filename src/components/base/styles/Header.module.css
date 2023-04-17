@@ -3,6 +3,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid #e1e1e1;
+}
+.Container > h3 {
+  font-weight: 700;
 }
 
 @media (max-width: 768px) {

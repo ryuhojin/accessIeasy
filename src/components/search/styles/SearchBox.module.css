@@ -1,0 +1,26 @@
+.Container {
+  width: 560px;
+  margin: 0 auto;
+}
+.Wrapper {
+  display: flex;
+  height: 40px;
+}
+.Desc {
+  padding-left: 20px;
+}
+.Wrapper > input {
+  flex-grow: 1;
+  padding-left: 8px;
+  border-radius: 5px;
+  border-width: 1px;
+}
+.Wrapper > button {
+  margin-left: 8px;
+}
+@media (max-width: 768px) {
+  .Container {
+    width: 100%;
+    padding: 0 20px;
+  }
+}
