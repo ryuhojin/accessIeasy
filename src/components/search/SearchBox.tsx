@@ -4,9 +4,10 @@ import styles from "./styles/SearchBox.module.css";
 interface SearchBoxProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
+  onCheckCategory: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
-const SearchBox = ({ onChange, onSearch }: SearchBoxProps) => {
+const SearchBox = ({ onChange, onSearch, onCheckCategory }: SearchBoxProps) => {
   return (
     <div className={styles.Container}>
       <div className={styles.Wrapper}>
@@ -26,13 +27,13 @@ const SearchBox = ({ onChange, onSearch }: SearchBoxProps) => {
       </p>
       <hr />
       <div>
-        <input type="checkbox" id="HTML" />
-        <label htmlFor="HTML"> TAG</label>&nbsp;&nbsp;
-        <input type="checkbox" id="IMAGE" />
+        <input type="checkbox" id="HTML" onClick={onCheckCategory} />
+        <label htmlFor="HTML"> HTML</label>&nbsp;&nbsp;
+        <input type="checkbox" id="IMAGE" onClick={onCheckCategory} />
         <label htmlFor="IMAGE"> IMAGE</label>&nbsp;&nbsp;
-        <input type="checkbox" id="VIDEO" />
+        <input type="checkbox" id="VIDEO" onClick={onCheckCategory} />
         <label htmlFor="VIDEO"> VIDEO</label>&nbsp;&nbsp;
-        <input type="checkbox" id="COLOR" />
+        <input type="checkbox" id="COLOR" onClick={onCheckCategory} />
         <label htmlFor="COLOR"> COLOR</label>
       </div>
       <hr />
@@ -40,7 +41,9 @@ const SearchBox = ({ onChange, onSearch }: SearchBoxProps) => {
       <ul className={styles.Desc}>
         <li>검색창에 검사하고자 하는 URL을 입력하세요.</li>
         <li>
-          해당 검사 플랫폼은 무료로 운영이 됩니다.
+          해당 검사 플랫폼은 <strong>무료</strong>로 운영이 됩니다.
+        </li>
+        <li>
           <strong>WCAG 2.0 Level AA</strong> 기준으로 검사를 진행합니다.
         </li>
         <li>

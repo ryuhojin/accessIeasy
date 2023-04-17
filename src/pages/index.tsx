@@ -15,7 +15,7 @@ export default function Home() {
       <MainTemplate>
         <SearchBoxContainer />
       </MainTemplate>
-      <Loading />
+      {/* <Loading /> */}
     </>
   );
 }
