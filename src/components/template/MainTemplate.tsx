@@ -3,7 +3,7 @@ import { Footer, Header } from "../base";
 import styles from "./styles/MainTemplate.module.css";
 
 interface BaseTemplateProp {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 }
 
 const font = Noto_Sans_KR({

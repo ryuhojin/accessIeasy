@@ -1,6 +1,7 @@
 import Head from "next/head";
 import MainTemplate from "@/components/template/MainTemplate";
 import SearchBoxContainer from "@/containers/search/SearchBoxContainer";
+import Loading from "@/components/base/Loading";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <MainTemplate>
         <SearchBoxContainer />
       </MainTemplate>
+      <Loading />
     </>
   );
 }
