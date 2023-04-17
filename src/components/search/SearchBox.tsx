@@ -1,18 +1,46 @@
+import React from "react";
 import styles from "./styles/SearchBox.module.css";
 
-const SearchBox = () => {
+interface SearchBoxProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearch: () => void;
+}
+
+const SearchBox = ({ onChange, onSearch }: SearchBoxProps) => {
   return (
     <div className={styles.Container}>
       <div className={styles.Wrapper}>
-        <input type="text" placeholder="https://www.sample.com" />
-        <button>&nbsp;&nbsp;검 사&nbsp;&nbsp;</button>
+        <input
+          type="text"
+          placeholder="https://www.sample.com 형식으로 URL을 입력하세요"
+          onChange={onChange}
+          onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key == "Enter") return onSearch();
+          }}
+        />
+        <button onClick={onSearch}>&nbsp;&nbsp;검 사&nbsp;&nbsp;</button>
       </div>
       <br />
+      <p>
+        <strong>검사항목</strong>
+      </p>
+      <hr />
+      <div>
+        <input type="checkbox" id="HTML" />
+        <label htmlFor="HTML"> TAG</label>&nbsp;&nbsp;
+        <input type="checkbox" id="IMAGE" />
+        <label htmlFor="IMAGE"> IMAGE</label>&nbsp;&nbsp;
+        <input type="checkbox" id="VIDEO" />
+        <label htmlFor="VIDEO"> VIDEO</label>&nbsp;&nbsp;
+        <input type="checkbox" id="COLOR" />
+        <label htmlFor="COLOR"> COLOR</label>
+      </div>
+      <hr />
       <br />
       <ul className={styles.Desc}>
         <li>검색창에 검사하고자 하는 URL을 입력하세요.</li>
         <li>
-          해당 검사 플랫폼은 무료로 운영이 됩니다.{" "}
+          해당 검사 플랫폼은 무료로 운영이 됩니다.
           <strong>WCAG 2.0 Level AA</strong> 기준으로 검사를 진행합니다.
         </li>
         <li>
