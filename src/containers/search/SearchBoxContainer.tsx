@@ -1,18 +1,24 @@
 import SearchBox from "@/components/search/SearchBox";
 import useInput from "@/libs/hooks/useInput";
-import { validateURL } from "@/libs/utils/validate";
+import {
+  getDocumentFromUrl,
+  getParsedDocument,
+  getUrlFromDocument,
+} from "@/libs/utils/urls";
 
 const SearchBoxContainer = () => {
-  const [url, onChange] = useInput("");
+  const [rootUrl, onChange] = useInput("");
 
-  const onSearch = async() => {
-    // onSearch Process
-    //1. URL검사
-    //2. 모든 서브URL가져오기
-    //3. URL및 서브URL 리스트에 추가
-    //4. 검사 프로세스
-    const regextResult = await validateURL(url);
-    alert(`정규식 통과 여부 : ${regextResult}`);
+  const onSearch = async () => {
+    const rootDoc = await getDocumentFromUrl(rootUrl);
+    const subUrlFromRootDoc = await getUrlFromDocument(rootDoc);
+    const allUrls = [rootUrl, ...subUrlFromRootDoc];
+
+    for (let i = 0, len = allUrls.length; i < len; i++) {
+      const _doc = await getDocumentFromUrl(allUrls[i]);
+      const document = await getParsedDocument(_doc);
+      console.log(document);
+    }
   };
   return <SearchBox onChange={onChange} onSearch={onSearch} />;
 };
