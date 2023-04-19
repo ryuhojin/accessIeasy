@@ -18,6 +18,11 @@
 .Wrapper > button {
   margin-left: 8px;
 }
+
+.CategoryWrapper {
+  display: flex;
+  justify-content: space-between;
+}
 @media (max-width: 768px) {
   .Container {
     width: 100%;

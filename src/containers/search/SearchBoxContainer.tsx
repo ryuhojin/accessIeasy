@@ -5,7 +5,7 @@ import {
   getParsedDocument,
   getUrlFromDocument,
 } from "@/libs/utils/urls";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const SearchBoxContainer = () => {
   const [rootUrl, onChange] = useInput("");
@@ -37,6 +37,19 @@ const SearchBoxContainer = () => {
     }
   };
 
+  const onCheckAllCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxs = document.querySelectorAll("input[type=checkbox]");
+    if (e.currentTarget.checked) {
+      checkboxs.forEach((v: any) => {
+        v.checked = true;
+      });
+    } else {
+      checkboxs.forEach((v: any) => {
+        v.checked = false;
+      });
+    }
+  };
+
   const onCheckCategory = (e: React.MouseEvent<HTMLInputElement>) => {
     setCategory({
       ...category,
@@ -49,6 +62,7 @@ const SearchBoxContainer = () => {
       onChange={onChange}
       onSearch={onSearch}
       onCheckCategory={onCheckCategory}
+      onCheckAllCategory={onCheckAllCategory}
     />
   );
 };
