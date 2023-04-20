@@ -9,44 +9,59 @@ export const CHECK_COLOR_CONTRAST = (doc: Document) => {
   let totalCount: number = elements.length;
   let failCount: number = 0;
   let successCount: number = 0;
+  let failCases: string[] = [];
 
-  for (let i = 0; i < elements.length; i++) {
-    const backgroundColor = getComputedStyle(elements[i]).getPropertyValue(
-      "background-color"
-    );
-    const color = getComputedStyle(elements[i]).getPropertyValue("color");
-    const contrastRatio = calculateContrastRatio(backgroundColor, color);
+  elements.forEach((element) => {
 
-    if (contrastRatio < 4.5) {
+    if (!element.parentElement) return successCount++;
+
+    const fontSize: number = Number(getComputedStyle(element).fontSize);
+    const fontWeight: number = Number(getComputedStyle(element).fontWeight);
+    const textColor = getComputedStyle(element).color;
+    const backgroundColor = getComputedStyle(
+      element.parentElement
+    ).backgroundColor;
+    const contrastRatio = getContrastRatio(textColor, backgroundColor);
+
+    if (
+      (fontSize >= 18 && fontWeight >= 700 && contrastRatio < 4.5) ||
+      (fontSize >= 14 && contrastRatio < 3)
+    ) {
       failCount++;
+      failCases.push(
+        `${element.outerHTML} 의 ${textColor} 와  ${backgroundColor} 의 명도 대비를 확인해주세요.`
+      );
     } else {
       successCount++;
     }
-  }
+  });
 
-  return [totalCount, failCount, successCount] as [number, number, number];
+  return [totalCount, failCount, successCount, failCases] as [
+    number,
+    number,
+    number,
+    string[]
+  ];
 };
 
-function calculateContrastRatio(color1: string, color2: string) {
-  const luminance1 = calculateRelativeLuminance(color1);
-  const luminance2 = calculateRelativeLuminance(color2);
-  const lightest = Math.max(luminance1, luminance2);
-  const darkest = Math.min(luminance1, luminance2);
-  return (lightest + 0.05) / (darkest + 0.05);
+function getContrastRatio(color1: string, color2: string) {
+  const color1Luminance = getLuminance(color1);
+  const color2Luminance = getLuminance(color2);
+  const lighterColor = Math.max(color1Luminance, color2Luminance);
+  const darkerColor = Math.min(color1Luminance, color2Luminance);
+  return (lighterColor + 0.05) / (darkerColor + 0.05);
 }
 
-function calculateRelativeLuminance(color: string) {
-  const values = color.replace(/rgba?\(|\)|\s/g, "").split(",");
-  const red = parseFloat(values[0]) / 255;
-  const green = parseFloat(values[1]) / 255;
-  const blue = parseFloat(values[2]) / 255;
-  const alpha = parseFloat(values[3]) || 1;
-
-  const r = red <= 0.03928 ? red / 12.92 : Math.pow((red + 0.055) / 1.055, 2.4);
-  const g =
-    green <= 0.03928 ? green / 12.92 : Math.pow((green + 0.055) / 1.055, 2.4);
-  const b =
-    blue <= 0.03928 ? blue / 12.92 : Math.pow((blue + 0.055) / 1.055, 2.4);
-
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+function getLuminance(color: any) {
+  const rgbValues = color.match(/\d+/g).map(Number);
+  const r = rgbValues[0] / 255;
+  const g = rgbValues[1] / 255;
+  const b = rgbValues[2] / 255;
+  const rLuminance =
+    r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+  const gLuminance =
+    g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+  const bLuminance =
+    b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+  return 0.2126 * rLuminance + 0.7152 * gLuminance + 0.0722 * bLuminance;
 }

@@ -4,31 +4,58 @@
  * KWAC 2.1 기준 24개 검사항목중 1번항목
  */
 export const CHECK_ALT_TEXT = (doc: Document) => {
-  const imageElements: HTMLCollectionOf<HTMLImageElement> =
-    doc.getElementsByTagName("img");
-  const inputElements: HTMLCollectionOf<HTMLInputElement> =
-    doc.getElementsByTagName("input");
+  const images = doc.querySelectorAll("img");
+  const inputImages = doc.querySelectorAll("input[type=image]");
 
-  let totalCount: number = imageElements.length + inputElements.length;
+  let totalCount: number = images.length + inputImages.length;
   let failCount: number = 0;
   let successCount: number = 0;
+  let failCases: string[] = [];
 
-  for (let i = 0, len = imageElements.length; i < len; i++) {
-    const image = imageElements[i];
+  for (let i = 0, len = images.length; i < len; i++) {
+    const image = images[i];
     const alt = image.getAttribute("alt");
-    const isDecorative =
+    const isDeco =
       image.getAttribute("role") === "presenstation" ||
       image.getAttribute("aria-hidden") === "true";
     if (!alt) {
       failCount++;
-    } else if (isDecorative && alt.trim().length > 0) {
-      //role 혹은 aria-hidden 속성을 이용해 이미지가 단순 프레젠테이션용인지판단
-      //판단 후, 해당 이미지에 alt제공 되있으면
+      failCases.push(
+        `${image.outerHTML} 태그에 대체 문자가 제공되지 않습니다.`
+      );
+    } else if (isDeco && alt.trim().length > 0) {
       failCount++;
-    }else{
+      failCases.push(
+        `${image.outerHTML} 태그는 단순 배경 및 프레젠테이션용 이미지 입니다. 알트제공이 되어선 안됩니다.`
+      );
+    } else {
       successCount++;
     }
   }
 
-  return [totalCount, failCount, successCount] as [number, number, number];
+  for (let i = 0, len = inputImages.length; i < len; i++) {
+    const image = inputImages[i];
+    const alt = image.getAttribute("alt");
+    const isDeco =
+      image.getAttribute("role") === "presenstation" ||
+      image.getAttribute("aria-hidden") === "true";
+    if (!alt) {
+      failCount++;
+      failCases.push(`${image.outerHTML} 태그에 대체 문자가 제공되지 않습니다.`);
+    } else if (isDeco && alt.trim().length > 0) {
+      failCount++;
+      failCases.push(
+        `${image.outerHTML} 태그는 단순 배경 및 프레젠테이션용 이미지 입니다. 알트제공이 되어선 안됩니다.`
+      );
+    } else {
+      successCount++;
+    }
+  }
+
+  return [totalCount, failCount, successCount, failCases] as [
+    number,
+    number,
+    number,
+    string[]
+  ];
 };
